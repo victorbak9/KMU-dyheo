@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/jammy64"
-  config.vm.hostname = "ci-runner"
+  config.vm.hostname = "gitlab.local2"
 
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
@@ -34,7 +34,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y postfix
 
     if [ ! -e /vagrant/gitlab-ce.deb ]; then
-        wget --content-disposition -O /vagrant/gitlab-ce.deb https://packages.gitlab.com/gitlab/gitlabce/packages/ubuntu/jammy/gitlab-ce_15.9.3-ce.0_amd64.deb/download.deb
+        #wget --content-disposition -O /vagrant/gitlab-ce.deb https://packages.gitlab.com/gitlab/gitlabce/packages/ubuntu/jammy/gitlab-ce_15.9.3-ce.0_amd64.deb/download.deb
+		wget --content-disposition https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/jammy/gitlab-ce_16.7.7-ce.0_amd64.deb/download.deb
     fi
     sudo dpkg -i /vagrant/gitlab-ce.deb
 
