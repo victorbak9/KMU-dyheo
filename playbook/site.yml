@@ -1,0 +1,7 @@
+hosts:runners
+become:yes
+connection:local
+roles:
+   -docker
+   -gitlab-runner
+   -serverspec

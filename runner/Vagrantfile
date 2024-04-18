@@ -5,24 +5,23 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/jammy64"
-  config.vm.hostname = "ansible.local"
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "4096"
-  end
+  config.vm.hostname = "runner.local"
 
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
   end
 
-  config.vm.network "private_network", ip: "192.168.33.46"
-  config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".git/"]
-  
-	config.vm.provision "shell", inline: <<-SHELL
-		export DEBIAN_FRONTEND=noninteractive
-		sudo apt -y update
-		sudo apt install -y software-properties-common
-		sudo add-apt-repository --yes --update ppa:ansible/ansible
-		sudo apt install -y ansible-core
-	SHELL
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 22, host: 8022
 
+  config.vm.network "private_network", ip: "192.168.33.45"
+  config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".git/"]
+
+  config.vm.provision "shell", inline: <<-SHELL
+    export DEBIAN_FRONTED=noninteractive
+    sudo apt -y update
+	sudo apt install -y software-properies-common
+	sudo add-apt-repository --yes --update ppa:ansible/ansible
+	sudo apt install -y ansible
+  SHELL
 end
